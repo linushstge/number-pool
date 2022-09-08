@@ -67,9 +67,17 @@ With the key you are able to use the sane number pools in multiple eloquent mode
 
 ## Usage
 
-Insert a new record into your newly created number_pool table and set up your initial base ``number``.
-On each Model creating event this trait will perform a native InnoDB ```FOR UPDATE``` lock inside a
-dedicated transaction to ensure uniqueness for the new generated number.
+Create a new number_pool to set up your initial base ``number`` for your first pool.
+
+``` php
+
+$numberPool = new NumberPool([
+   'key' => 'invoice.number',
+   'number => 999,
+   'description' => 'Pool for generating unique ascending invoice numbers'
+]);
+$numberPool->save();
+```
 
 Add the ```NumberPool``` trait to one of your existing model and implement 
 the abstract methods ``numberPoolKey`` and ``numberPoolAttribute`` to set up your pool and local
@@ -98,6 +106,9 @@ class Invoice extends Model
     }
 }
 ```
+
+On each Model creating event this trait will perform a native InnoDB ```FOR UPDATE``` lock inside a
+dedicated transaction to ensure uniqueness for the new generated number.
 
 ## Custom increment step size
 
