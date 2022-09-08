@@ -1,9 +1,13 @@
-# Laravel Number Pool Trait for Model ascending unique increments
+# Eloquent Trait for unique Model ascending numbers
 
-Create a shared Number Pool for each of business number ranges to use native MySQL / MariaDB ``FOR UPDATE`` atomic locks if you run on a MySQL Master/Master Replication or on galera cluster.
+Create a shared Number Pool for each of business number ranges to use native 
+MySQL / MariaDB ``FOR UPDATE`` atomic locks if you run on a MySQL Master/Master 
+Replication or on galera cluster or if you have multiple message queue workers 
+which are consuming the same jobs.
 
-If you're running on replication you're primary auto increments are probably not reliable for unique ascending numbers. 
-With this Eloquent trait your able to generate ascending unique numbers while using InnoDB's ``FOR UPDATE`` atomic lock.
+If you're running on replication you're primary auto increments are probably not 
+reliable for unique ascending numbers. With this Eloquent trait your able to generate 
+ascending unique numbers while using InnoDB's native ``FOR UPDATE`` row lock.
 
 **Example Invoice Table:**
 
@@ -13,11 +17,14 @@ With this Eloquent trait your able to generate ascending unique numbers while us
 | 3  | invoice | 1001   |
 | 6  | invoice | 1002   |
 
+With Master-Master Replication or Galera cluster you'r primary auto increment is not reliable for any 
+ascending numbers.
+
 ## Installation
 This package can be installed through composer:
 
 ``` shell
-composer require linushstge/laravel.trait.number-pool
+composer require linushstge/number-pool
 ```
 
 After installation, you have to create a new migration with ``artisan:make migration`` for your number pools.
@@ -55,8 +62,14 @@ return new class extends Migration
     }
 };
 ```
+Number Pools stores a string identifier key and the **last** used number of any pool your application is using.
+With the key you are able to use the sane number pools in multiple eloquent models.
 
 ## Usage
+
+Insert a new record into your newly created number_pool table and set up your initial base ``number``.
+On each Model creating event this trait will perform a native InnoDB ```FOR UPDATE``` lock inside a
+dedicated transaction to ensure uniqueness for the new generated number.
 
 Add the ```NumberPool``` trait to one of your existing model and implement 
 the abstract methods ``numberPoolKey`` and ``numberPoolAttribute`` to set up your pool and local
@@ -76,12 +89,12 @@ class Invoice extends Model
 
     public function numberPoolKey(): string
     {
-        return 'invoice.number_internal';
+        return 'invoice.number';
     }
 
     public function numberPoolAttribute(): string
     {
-        return 'number_internal';
+        return 'number';
     }
 }
 ```
@@ -120,14 +133,28 @@ class Invoice
     {
         static::creating(function ($invoice) {
         
-            // your unique incremented number from your number pool is already available before the 
-            // transaction has been committed.
+            // your unique incremented number from your number pool is already 
+            //available before the transaction has been committed.
             
             $uniqueNumber = $invoice->number;
         });
     }
 }
 ```
+
+---
+## FAQ
+
+### Is this package is compatible with Laravel Horizon?
+Yes, you can use horizon, your own supervisor process monitor or native systemd services. 
+By InnoDB's technology the native ROW READ LOCK is guaranteed.
+
+### Do I need InnoDB engine for all tables?
+No, this package only requires InnoDB for your ```number_pool``` table.
+
+### Do I need redis?
+No, redis is not required, but preferred for your message queue, especially if your consuming
+the same jobs on multiple workers.
 
 ---
 ## License
