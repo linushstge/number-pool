@@ -17,7 +17,7 @@ ascending unique numbers while using InnoDB's native ``FOR UPDATE`` row lock.
 | 3  | invoice | 1001   |
 | 6  | invoice | 1002   |
 
-With Master-Master Replication or Galera cluster you'r primary auto increment is not reliable for any 
+With Master-Master Replication or Galera cluster your primary auto increment is not reliable for any 
 ascending numbers.
 
 ## Installation
