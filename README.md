@@ -67,7 +67,7 @@ With the key you are able to use the sane number pools in multiple eloquent mode
 
 ## Usage
 
-Create a new number_pool to set up your initial base ``number`` for your first pool.
+Create a new ```number_pool``` to set up your initial **last** base number for your first pool.
 
 ``` php
 
@@ -119,16 +119,17 @@ random steps between your numbers.
 ``` php
 public function numberPoolStepSize(): int
 {
+    // return any positive integer
     return rand(10, 50);
 }
 ```
-Please ensure a positive ```integer``` for your step size. Otherwise, the ``NumberPoolException`` will be thrown.
+Please ensure to return a positive ```integer``` for your step size. Otherwise, the ``NumberPoolException`` will be thrown.
 
 ---
 
 ## Usage of static Eloquent event hooks
 
-As you may already know, laravel supports anonymous static booted events to hook inside a creating or created event.
+As you may already know, laravel supports static booted events to hook inside a creating or created event.
 You can use them to build custom logic with your newly unique number pool integer. 
 
 For example:
