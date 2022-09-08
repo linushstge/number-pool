@@ -63,17 +63,17 @@ return new class extends Migration
 };
 ```
 Number Pools stores a string identifier key and the **last** used number of any pool your application is using.
-With the key you are able to use the sane number pools in multiple eloquent models.
+With the key you are able to use the same number pools in multiple eloquent models.
 
 ## Usage
 
-Create a new ```number_pool``` to set up your initial **last** base number for your first pool.
+Create a new ```NumberPool``` for your first eloquent model and persist it to database.
 
 ``` php
 
 $numberPool = new NumberPool([
    'key' => 'invoice.number',
-   'number => 999,
+   'number => 999, // latest persisted number
    'description' => 'Pool for generating unique ascending invoice numbers'
 ]);
 $numberPool->save();
@@ -81,7 +81,7 @@ $numberPool->save();
 
 Add the ```NumberPool``` trait to one of your existing model and implement 
 the abstract methods ``numberPoolKey`` and ``numberPoolAttribute`` to set up your pool and local
-model attribute where you wish to save your ascending unique increment.
+model attribute where you wish to save your ascending unique incremented number.
 
 ``` php
 <?php
@@ -97,17 +97,19 @@ class Invoice extends Model
 
     public function numberPoolKey(): string
     {
+        // return your number pool key
         return 'invoice.number';
     }
 
     public function numberPoolAttribute(): string
     {
+        // return your local model attribute where you want to store your number
         return 'number';
     }
 }
 ```
 
-On each Model creating event this trait will perform a native InnoDB ```FOR UPDATE``` lock inside a
+On each Model ``creating`` event this trait will perform a native InnoDB ```FOR UPDATE``` lock inside a
 dedicated transaction to ensure uniqueness for the new generated number.
 
 ## Custom increment step size
