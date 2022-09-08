@@ -9,7 +9,7 @@ If you're running on replication you're primary auto increments are probably not
 reliable for unique ascending numbers. With this Eloquent trait your able to generate 
 ascending unique numbers while using InnoDB's native ``FOR UPDATE`` row lock.
 
-**Example Invoice Table:**
+**Example Invoice Table on a Galera Cluster with three nodes:**
 
 | id | type    | number |
 |----|---------|--------|
