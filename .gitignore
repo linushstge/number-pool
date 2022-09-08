@@ -1,1 +1,9 @@
-.idea
+composer.lock
+vendor
+build
+
+.idea/
+.idea_modules/
+
+.phpunit.result.cache
+/.php-cs-fixer.cache

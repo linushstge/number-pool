@@ -1,0 +1,43 @@
+{
+    "name": "linushstge/number-pool",
+    "description": "Create a shared Number Pool for each of business number ranges to use native MySQL / MariaDB ``FOR UPDATE`` atomic locks if you run on a MySQL Master/Master Replication or on galera cluster.",
+    "type": "library",
+    "keywords":
+    [
+        "linushstge",
+        "count",
+        "increment",
+        "eloquent",
+        "model",
+        "laravel",
+        "unique",
+        "numbers"
+    ],
+    "authors": [
+        {
+            "name": "Linus Holtstiege",
+            "email": "l.holtstiege@creoline.com",
+            "homepage": "https://www.creoline.de/",
+            "role": "Lead Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php" : "^8.0",
+        "illuminate/support": "^9.0",
+        "illuminate/database": "^9.0",
+        "illuminate/config": "^9.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "linushstge\\NumberPool\\": "src"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "license": "MIT"
+}
