@@ -16,19 +16,19 @@ With this Eloquent trait your able to generate ascending unique numbers while us
 ## Installation
 This package can be installed through composer:
 
-```
+``` shell
 composer require linushstge/laravel.trait.number-pool
 ```
 
 After installation, you have to create a new migration with ``artisan:make migration`` for your number pools.
 
-```
+``` shell
 php artisan make:migration CreateNumberPool
 ```
 
 Example:
 
-```
+``` php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -62,7 +62,7 @@ Add the ```NumberPool``` trait to one of your existing model and implement
 the abstract methods ``numberPoolKey`` and ``numberPoolAttribute`` to set up your pool and local
 model attribute where you wish to save your ascending unique increment.
 
-```
+``` php
 <?php
 
 namespace App\Models\Account;
@@ -92,7 +92,7 @@ If you wish to specify the step size you can implement the public method ```numb
 to dynamically adjust the step size for any new generated increments. You also can use ``rand`` to implement
 random steps between your numbers.
 
-```
+``` php
 public function numberPoolStepSize(): int
 {
     return rand(10, 50);
@@ -109,7 +109,7 @@ You can use them to build custom logic with your newly unique number pool intege
 
 For example:
 
-```
+``` php
 <?php
 
 class Invoice
